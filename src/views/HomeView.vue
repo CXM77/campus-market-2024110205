@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMarketStore } from '@/stores/market'
 import { useRouter } from 'vue-router'
+import GoodsCard from '@/components/GoodsCard.vue'
 const store = useMarketStore()
 const router = useRouter()
 
@@ -50,21 +51,7 @@ const recentItems = store.goodsList.slice(0, 4)
 
     <h2 class="section-title mt-24">最新信息</h2>
     <div class="grid-2">
-      <div v-for="item in recentItems" :key="item.id" class="card card-hover" @click="router.push('/' + item.type)">
-        <div class="flex flex-center gap-8">
-          <span class="tag" :class="'tag-' + (item.type === 'trade' ? 'blue' : item.type === 'lost' ? 'red' : item.type === 'group' ? 'yellow' : 'green')">
-            {{ { trade: '二手', lost: '失物', group: '拼单', errand: '跑腿' }[item.type] }}
-          </span>
-          <span class="text-secondary">{{ item.location }}</span>
-        </div>
-        <h3 class="item-title mt-16">{{ item.title }}</h3>
-        <p class="item-desc">{{ item.description }}</p>
-        <div class="flex flex-center gap-12 mt-16">
-          <span v-if="item.price" class="price">¥{{ item.price }}</span>
-          <span v-if="item.reward" class="price">¥{{ item.reward }}</span>
-          <span class="text-secondary">{{ item.status }}</span>
-        </div>
-      </div>
+      <GoodsCard v-for="item in recentItems" :key="item.id" :item="item" />
     </div>
   </div>
 </template>
@@ -84,6 +71,4 @@ const recentItems = store.goodsList.slice(0, 4)
 .cat-icon { font-size: 36px; margin-bottom: 8px; }
 .cat-name { font-weight: 600; font-size: 15px; }
 .cat-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-.item-title { font-size: 15px; font-weight: 600; }
-.item-desc { font-size: 13px; color: var(--text-secondary); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 </style>
