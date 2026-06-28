@@ -5,6 +5,7 @@
       <router-link to="/list">列表页</router-link>
       <router-link to="/publish">发布页</router-link>
       <router-link to="/message">消息页</router-link>
+      <router-link to="/board">看板页</router-link>
       <router-link to="/profile">个人中心</router-link>
     </nav>
     <router-view />

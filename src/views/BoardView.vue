@@ -1,19 +1,11 @@
-<script setup lang="ts">
-import { useMarketStore } from '@/stores/market'
-
-const store = useMarketStore()
-const s = store.boardStats
-</script>
-
 <template>
   <div>
     <h1>看板页</h1>
     <div class="grid">
-      <div class="card"><span>商品总数</span><strong>{{ s.total }}</strong></div>
-      <div class="card"><span>收藏数</span><strong>{{ s.fav }}</strong></div>
-      <div class="card"><span>购物车</span><strong>{{ s.cart }}</strong></div>
-      <div class="card"><span>订单数</span><strong>{{ s.order }}</strong></div>
-      <div class="card"><span>未读消息</span><strong class="warn">{{ s.unread }}</strong></div>
+      <div class="card"><span>商品总数</span><strong>12</strong></div>
+      <div class="card"><span>今日访客</span><strong>86</strong></div>
+      <div class="card"><span>成交订单</span><strong>7</strong></div>
+      <div class="card"><span>待回复消息</span><strong class="warn">3</strong></div>
     </div>
   </div>
 </template>
