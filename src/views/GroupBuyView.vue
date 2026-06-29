@@ -35,6 +35,7 @@ onMounted(async () => {
           <span :class="item.status === 'open' ? 'status-open' : 'status-done'">
             {{ item.status === 'open' ? '进行中' : item.status === 'closed' ? '已截止' : '已完成' }}
           </span>
+          <span class="contact">{{ item.contact }}</span>
         </template>
       </ItemCard>
     </div>
@@ -47,6 +48,7 @@ onMounted(async () => {
 .page-header h1 { margin: 0 0 8px; }
 .page-header p { margin: 0; color: #6b7280; }
 .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.status-open { margin-left: auto; color: #059669; }
-.status-done { margin-left: auto; color: #6b7280; }
+.status-open { color: #059669; }
+.status-done { color: #6b7280; }
+.contact { margin-left: auto; color: #2563eb; font-size: 13px; }
 </style>

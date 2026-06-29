@@ -11,6 +11,7 @@ export interface GroupBuyItem {
   publisher: string
   status: string
   description: string
+  contact: string
 }
 
 export function getGroupBuys() {

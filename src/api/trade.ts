@@ -12,6 +12,7 @@ export interface TradeItem {
   image: string
   status: string
   description: string
+  contact: string
 }
 
 export function getTrades() {

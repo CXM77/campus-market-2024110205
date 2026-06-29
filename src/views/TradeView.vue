@@ -33,6 +33,7 @@ onMounted(async () => {
         <template #footer>
           <strong>￥{{ item.price }}</strong>
           <span class="condition">{{ item.condition }}</span>
+          <span class="contact">{{ item.contact }}</span>
         </template>
       </ItemCard>
     </div>
@@ -46,4 +47,5 @@ onMounted(async () => {
 .page-header p { margin: 0; color: #6b7280; }
 .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .condition { margin-left: 12px; color: #6b7280; }
+.contact { margin-left: auto; color: #2563eb; font-size: 13px; }
 </style>

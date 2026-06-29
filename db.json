@@ -11,7 +11,8 @@
       "publishTime": "2026-06-01 10:20",
       "image": "",
       "status": "open",
-      "description": "键盘使用正常，因更换设备转让。"
+      "description": "键盘使用正常，因更换设备转让。",
+      "contact": "微信: zhangkai"
     },
     {
       "id": 2,
@@ -24,7 +25,8 @@
       "publishTime": "2026-06-01 14:30",
       "image": "",
       "status": "open",
-      "description": "教材有少量笔记，不影响使用。"
+      "description": "教材有少量笔记，不影响使用。",
+      "contact": "QQ: 12345678"
     },
     {
       "id": 3,
@@ -37,7 +39,8 @@
       "publishTime": "2026-06-02 09:00",
       "image": "",
       "status": "open",
-      "description": "低音效果很好，续航约 6 小时。"
+      "description": "低音效果很好，续航约 6 小时。",
+      "contact": "手机: 13800001111"
     },
     {
       "id": 4,
@@ -50,7 +53,8 @@
       "publishTime": "2026-06-02 16:45",
       "image": "",
       "status": "open",
-      "description": "买多了，原价转出。"
+      "description": "买多了，原价转出。",
+      "contact": "微信: wangying"
     },
     {
       "id": 5,
@@ -63,7 +67,8 @@
       "publishTime": "2026-06-03 11:30",
       "image": "",
       "status": "open",
-      "description": "功率 600W，适合煮面煮粥。"
+      "description": "功率 600W，适合煮面煮粥。",
+      "contact": "QQ: 87654321"
     },
     {
       "id": 6,
@@ -76,7 +81,8 @@
       "publishTime": "2026-06-03 20:10",
       "image": "",
       "status": "closed",
-      "description": "变速正常，前后刹车已更换。"
+      "description": "变速正常，前后刹车已更换。",
+      "contact": "手机: 13900002222"
     },
     {
       "id": 7,
@@ -89,7 +95,8 @@
       "publishTime": "2026-06-04 08:00",
       "image": "",
       "status": "done",
-      "description": "已上岸，转让给学弟学妹。"
+      "description": "已上岸，转让给学弟学妹。",
+      "contact": "微信: zhaolei"
     }
   ],
   "lostFounds": [
@@ -171,7 +178,8 @@
       "location": "学校南门",
       "publisher": "计算机学院学生",
       "status": "open",
-      "description": "AA 制，人数够后统一预约。"
+      "description": "AA 制，人数够后统一预约。",
+      "contact": "手机: 13600001111"
     },
     {
       "id": 2,
@@ -183,7 +191,8 @@
       "location": "线上确认",
       "publisher": "外国语学院学生",
       "status": "open",
-      "description": "达到人数后统一下单。"
+      "description": "达到人数后统一下单。",
+      "contact": "微信: zhaoxue"
     },
     {
       "id": 3,
@@ -195,7 +204,8 @@
       "location": "东区食堂三楼一点点",
       "publisher": "人文学院学生",
       "status": "open",
-      "description": "满四杯起送，人均约 15 元。"
+      "description": "满四杯起送，人均约 15 元。",
+      "contact": "QQ: 23456789"
     },
     {
       "id": 4,
@@ -207,7 +217,8 @@
       "location": "体育馆羽毛球场",
       "publisher": "体育学院学生",
       "status": "open",
-      "description": "分摊场地费，双打局。"
+      "description": "分摊场地费，双打局。",
+      "contact": "微信: sunpeng"
     },
     {
       "id": 5,
@@ -219,7 +230,8 @@
       "location": "东区自习室 301",
       "publisher": "备考学生",
       "status": "open",
-      "description": "自习室空调需要充值，大家平摊。"
+      "description": "自习室空调需要充值，大家平摊。",
+      "contact": "手机: 13700002222"
     },
     {
       "id": 6,
@@ -231,7 +243,8 @@
       "location": "北门水果店自提",
       "publisher": "生活部",
       "status": "done",
-      "description": "已到货，请自提。"
+      "description": "已到货，请自提。",
+      "contact": "站内消息联系"
     }
   ],
   "errands": [
