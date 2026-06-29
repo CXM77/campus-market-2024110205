@@ -1,33 +1,51 @@
 <script setup lang="ts">
-import { useMarketStore } from '@/stores/market'
-import { ref, computed } from 'vue'
-import SearchBar from '@/components/SearchBar.vue'
-import GoodsCard from '@/components/GoodsCard.vue'
-const store = useMarketStore()
-const search = ref('')
-const filter = ref('全部')
+import { onMounted, ref } from 'vue'
+import ItemCard from '@/components/ItemCard.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import { getLostFounds, type LostFoundItem } from '@/api/lostFound'
 
-const list = computed(() => {
-  let items = store.lostList
-  if (search.value) items = items.filter(i => i.title.includes(search.value))
-  if (filter.value !== '全部') items = items.filter(i => i.status === filter.value)
-  return items
+const items = ref<LostFoundItem[]>([])
+
+const typeLabel: Record<string, string> = { lost: '丢失', found: '拾到' }
+
+onMounted(async () => {
+  const res = await getLostFounds()
+  items.value = res.data
 })
-
-const categories = ['全部', '丢失', '拾到']
 </script>
 
 <template>
-  <div>
-    <h1 class="page-title">失物招领</h1>
-    <SearchBar v-model:search="search" v-model:filter="filter" :categories="categories" placeholder="搜索失物名称..." action-text="发布信息" />
-    <div v-if="list.length === 0" class="empty">暂无信息</div>
-    <div v-else class="grid-3">
-      <GoodsCard v-for="item in list" :key="item.id" :item="item" />
+  <section class="page">
+    <div class="page-header">
+      <h1>失物招领</h1>
+      <p>帮助遗失物品找回主人，让每一件失物都能物归原主。</p>
     </div>
-  </div>
+
+    <EmptyState v-if="items.length === 0" text="暂无失物招领信息" />
+    <div v-else class="list">
+      <ItemCard
+        v-for="item in items"
+        :key="item.id"
+        :title="item.title"
+        :description="item.description"
+        :tag="typeLabel[item.type] || item.type"
+        :location="item.location"
+        :time="item.eventTime"
+      >
+        <template #footer>
+          <span>物品：{{ item.itemName }}</span>
+          <span class="contact">联系人：{{ item.contact }}</span>
+        </template>
+      </ItemCard>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.empty { text-align: center; padding: 60px 0; color: var(--text-secondary); font-size: 15px; }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.page-header { padding: 24px; border-radius: 16px; background: #fff; }
+.page-header h1 { margin: 0 0 8px; }
+.page-header p { margin: 0; color: #6b7280; }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.contact { margin-left: auto; color: #6b7280; font-size: 13px; }
 </style>

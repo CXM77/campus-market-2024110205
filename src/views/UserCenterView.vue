@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { useMarketStore } from '@/stores/market'
-import { useRouter } from 'vue-router'
-const store = useMarketStore()
-const router = useRouter()
-
 const user = {
   name: '校园用户',
   id: '2024001',
   avatar: '👤',
   joinDate: '2024年9月',
-  publishedCount: store.goodsList.length,
+  publishedCount: 26,
 }
 
 const menuItems = [

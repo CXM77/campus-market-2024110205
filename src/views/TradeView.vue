@@ -1,33 +1,49 @@
 <script setup lang="ts">
-import { useMarketStore } from '@/stores/market'
-import { ref, computed } from 'vue'
-import SearchBar from '@/components/SearchBar.vue'
-import GoodsCard from '@/components/GoodsCard.vue'
-const store = useMarketStore()
-const search = ref('')
-const filter = ref('全部')
+import { onMounted, ref } from 'vue'
+import ItemCard from '@/components/ItemCard.vue'
+import EmptyState from '@/components/EmptyState.vue'
+import { getTrades, type TradeItem } from '@/api/trade'
 
-const list = computed(() => {
-  let items = store.tradeList
-  if (search.value) items = items.filter(i => i.title.includes(search.value))
-  if (filter.value !== '全部') items = items.filter(i => i.category === filter.value)
-  return items
+const trades = ref<TradeItem[]>([])
+
+onMounted(async () => {
+  const res = await getTrades()
+  trades.value = res.data
 })
-
-const categories = ['全部', '电子产品', '书籍教材', '生活用品', '服饰鞋包']
 </script>
 
 <template>
-  <div>
-    <h1 class="page-title">二手交易</h1>
-    <SearchBar v-model:search="search" v-model:filter="filter" :categories="categories" placeholder="搜索商品名称..." action-text="发布商品" />
-    <div v-if="list.length === 0" class="empty">暂无匹配商品</div>
-    <div v-else class="grid-3">
-      <GoodsCard v-for="item in list" :key="item.id" :item="item" />
+  <section class="page">
+    <div class="page-header">
+      <h1>二手交易</h1>
+      <p>浏览同学发布的闲置物品，发现校园内的实用好物。</p>
     </div>
-  </div>
+
+    <EmptyState v-if="trades.length === 0" text="暂无二手交易信息" />
+    <div v-else class="list">
+      <ItemCard
+        v-for="item in trades"
+        :key="item.id"
+        :title="item.title"
+        :description="item.description"
+        :tag="item.category"
+        :location="item.location"
+        :time="item.publishTime"
+      >
+        <template #footer>
+          <strong>￥{{ item.price }}</strong>
+          <span class="condition">{{ item.condition }}</span>
+        </template>
+      </ItemCard>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.empty { text-align: center; padding: 60px 0; color: var(--text-secondary); font-size: 15px; }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.page-header { padding: 24px; border-radius: 16px; background: #fff; }
+.page-header h1 { margin: 0 0 8px; }
+.page-header p { margin: 0; color: #6b7280; }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.condition { margin-left: 12px; color: #6b7280; }
 </style>

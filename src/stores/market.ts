@@ -1,5 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { getTrades } from '@/api/trade'
+import { getLostFounds } from '@/api/lostFound'
+import { getGroupBuys } from '@/api/groupBuy'
+import { getErrands } from '@/api/errand'
+import type { TradeItem } from '@/api/trade'
+import type { LostFoundItem } from '@/api/lostFound'
+import type { GroupBuyItem } from '@/api/groupBuy'
+import type { ErrandItem } from '@/api/errand'
 
 export interface Goods {
   id: number
@@ -18,18 +26,51 @@ export interface Goods {
   image?: string
 }
 
+function toGoods(trade: TradeItem): Goods {
+  return {
+    id: trade.id, title: trade.title, price: trade.price,
+    description: trade.description, category: trade.category,
+    type: 'trade',
+    status: trade.status === 'open' ? '在售' : trade.status === 'closed' ? '已下架' : '已售出',
+    location: trade.location, contact: trade.publisher,
+    time: trade.publishTime, image: trade.image || undefined,
+  }
+}
+
+function toGoodsFromLost(item: LostFoundItem): Goods {
+  return {
+    id: item.id, title: item.title, price: 0,
+    description: item.description, category: item.itemName,
+    type: 'lost', status: item.type === 'lost' ? '丢失' : '拾到',
+    location: item.location, contact: item.contact, time: item.eventTime,
+  }
+}
+
+function toGoodsFromGroup(item: GroupBuyItem): Goods {
+  return {
+    id: item.id, title: item.title, price: 0,
+    description: item.description, category: item.type,
+    type: 'group',
+    status: item.status === 'open' ? '进行中' : item.status === 'closed' ? '已截止' : '已完成',
+    location: item.location, contact: item.publisher,
+    people: item.currentCount, maxPeople: item.targetCount,
+  }
+}
+
+function toGoodsFromErrand(item: ErrandItem): Goods {
+  return {
+    id: item.id, title: item.title, price: 0,
+    description: item.description, category: item.taskType,
+    type: 'errand',
+    status: item.status === 'open' ? '进行中' : item.status === 'closed' ? '已截止' : '已完成',
+    location: `${item.from} → ${item.to}`, contact: item.publisher,
+    reward: item.reward,
+  }
+}
+
 export const useMarketStore = defineStore('market', () => {
-  const goodsList = ref<Goods[]>([
-    { id: 1, title: '二手高数课本', price: 12, category: '教材', type: 'trade', description: '九成新，有笔记标注', status: '在售', location: '东校区', image: 'https://picsum.photos/seed/book/400/300' },
-    { id: 2, title: '校园电动车', price: 580, category: '出行', type: 'trade', description: '骑了半年，续航还不错', status: '在售', location: '西校区', image: 'https://picsum.photos/seed/bike/400/300' },
-    { id: 3, title: '无线耳机', price: 75, category: '数码', type: 'trade', description: '音质良好，充电仓完好', status: '在售', location: '南校区', image: 'https://picsum.photos/seed/earphone/400/300' },
-    { id: 4, title: '拾到校园卡一张', price: 0, type: 'lost', description: '在图书馆三楼拾到，请失主联系', status: '拾到', location: '图书馆', contact: '138****5678', time: '2026-06-27' },
-    { id: 5, title: '丢失黑色耳机盒', price: 0, type: 'lost', description: '西门打印店附近丢失，内含耳机', status: '丢失', location: '西门打印店', time: '2026-06-26' },
-    { id: 6, title: '东区食堂三楼拼奶茶', price: 15, type: 'group', description: '一点点奶茶，还差2人', status: '进行中', location: '东区食堂', people: 2, maxPeople: 4 },
-    { id: 7, title: '周五晚拼车去高铁站', price: 20, type: 'group', description: '周五晚上7点出发，分摊车费', status: '进行中', location: '南大门', people: 1, maxPeople: 3 },
-    { id: 8, title: '求帮取快递到6栋', price: 0, type: 'errand', description: '快递在菜鸟驿站，送到6栋宿舍', reward: 5, status: '进行中', location: '菜鸟驿站→6栋' },
-    { id: 9, title: '代买午餐到实验室', price: 0, type: 'errand', description: '东二食堂打包一份红烧肉饭到计算机楼', reward: 3, status: '进行中', location: '东二食堂→计算机楼' },
-  ])
+  const goodsList = ref<Goods[]>([])
+  const loading = ref(false)
 
   const favIds = ref<number[]>([])
   const cartIds = ref<number[]>([])
@@ -39,6 +80,26 @@ export const useMarketStore = defineStore('market', () => {
   const groupList = computed(() => goodsList.value.filter(g => g.type === 'group'))
   const errandList = computed(() => goodsList.value.filter(g => g.type === 'errand'))
   const favList = computed(() => goodsList.value.filter(g => favIds.value.includes(g.id)))
+
+  async function loadAll() {
+    loading.value = true
+    try {
+      const { data: trades } = await getTrades()
+      const { data: lostFounds } = await getLostFounds()
+      const { data: groupBuys } = await getGroupBuys()
+      const { data: errands } = await getErrands()
+      goodsList.value = [
+        ...trades.map(toGoods),
+        ...lostFounds.map(toGoodsFromLost),
+        ...groupBuys.map(toGoodsFromGroup),
+        ...errands.map(toGoodsFromErrand),
+      ]
+    } catch (e) {
+      console.error('Failed to load data:', e)
+    } finally {
+      loading.value = false
+    }
+  }
 
   function getGoodsById(id: number) { return goodsList.value.find(g => g.id === id) }
   function toggleFav(id: number) {
@@ -51,8 +112,8 @@ export const useMarketStore = defineStore('market', () => {
   function isInCart(id: number) { return cartIds.value.includes(id) }
 
   return {
-    goodsList, favIds, cartIds,
+    goodsList, loading, favIds, cartIds,
     tradeList, lostList, groupList, errandList, favList,
-    getGoodsById, toggleFav, isFav, addToCart, removeFromCart, isInCart,
+    loadAll, getGoodsById, toggleFav, isFav, addToCart, removeFromCart, isInCart,
   }
 })

@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { useMarketStore } from '@/stores/market'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import GoodsCard from '@/components/GoodsCard.vue'
-const store = useMarketStore()
-const router = useRouter()
+import ItemCard from '@/components/ItemCard.vue'
+import { getTrades, type TradeItem } from '@/api/trade'
+import { getLostFounds, type LostFoundItem } from '@/api/lostFound'
+import { getGroupBuys, type GroupBuyItem } from '@/api/groupBuy'
+import { getErrands, type ErrandItem } from '@/api/errand'
 
-const stats = [
-  { label: '在售商品', value: store.tradeList.length, color: '#4a90d9' },
-  { label: '失物信息', value: store.lostList.length, color: '#059669' },
-  { label: '拼单进行中', value: store.groupList.length, color: '#d97706' },
-  { label: '跑腿任务', value: store.errandList.length, color: '#dc2626' },
-]
+const router = useRouter()
+const trades = ref<TradeItem[]>([])
+const lostFounds = ref<LostFoundItem[]>([])
+const groupBuys = ref<GroupBuyItem[]>([])
+const errands = ref<ErrandItem[]>([])
+const stats = ref([
+  { label: '在售商品', value: 0, color: '#4a90d9' },
+  { label: '失物信息', value: 0, color: '#059669' },
+  { label: '拼单进行中', value: 0, color: '#d97706' },
+  { label: '跑腿任务', value: 0, color: '#dc2626' },
+])
 
 const categories = [
   { name: '二手交易', icon: '🛒', path: '/trade', desc: '闲置物品流转' },
@@ -19,7 +26,32 @@ const categories = [
   { name: '跑腿委托', icon: '🏃', path: '/errand', desc: '任务互助' },
 ]
 
-const recentItems = store.goodsList.slice(0, 4)
+interface RecentItem { id: number; title: string; description: string; tag: string; location: string; time: string }
+const recentItems = ref<RecentItem[]>([])
+
+onMounted(async () => {
+  const [tr, lf, gb, er] = await Promise.all([
+    getTrades(), getLostFounds(), getGroupBuys(), getErrands(),
+  ])
+  trades.value = tr.data
+  lostFounds.value = lf.data
+  groupBuys.value = gb.data
+  errands.value = er.data
+  stats.value = [
+    { label: '在售商品', value: tr.data.length, color: '#4a90d9' },
+    { label: '失物信息', value: lf.data.length, color: '#059669' },
+    { label: '拼单进行中', value: gb.data.length, color: '#d97706' },
+    { label: '跑腿任务', value: er.data.length, color: '#dc2626' },
+  ]
+
+  const all = [
+    ...tr.data.map(i => ({ id: i.id, title: i.title, description: i.description, tag: i.category, location: i.location, time: i.publishTime })),
+    ...lf.data.map(i => ({ id: i.id, title: i.title, description: i.description, tag: i.type, location: i.location, time: i.eventTime })),
+    ...gb.data.map(i => ({ id: i.id, title: i.title, description: i.description, tag: i.type, location: i.location, time: i.deadline })),
+    ...er.data.map(i => ({ id: i.id, title: i.title, description: i.description, tag: i.taskType, location: `${i.from} → ${i.to}`, time: i.deadline })),
+  ]
+  recentItems.value = all.slice(0, 4)
+})
 </script>
 
 <template>
@@ -50,8 +82,16 @@ const recentItems = store.goodsList.slice(0, 4)
     </div>
 
     <h2 class="section-title mt-24">最新信息</h2>
-    <div class="grid-2">
-      <GoodsCard v-for="item in recentItems" :key="item.id" :item="item" />
+    <div class="list">
+      <ItemCard
+        v-for="item in recentItems"
+        :key="item.id"
+        :title="item.title"
+        :description="item.description"
+        :tag="item.tag"
+        :location="item.location"
+        :time="item.time"
+      />
     </div>
   </div>
 </template>
@@ -71,4 +111,5 @@ const recentItems = store.goodsList.slice(0, 4)
 .cat-icon { font-size: 36px; margin-bottom: 8px; }
 .cat-name { font-weight: 600; font-size: 15px; }
 .cat-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 </style>
