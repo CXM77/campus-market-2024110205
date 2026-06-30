@@ -6,6 +6,13 @@ import { getGroupBuys, type GroupBuyItem } from '@/api/groupBuy'
 
 const items = ref<GroupBuyItem[]>([])
 
+function formatContact(contact: string): string {
+  const prefixes = ['手机:', '手机：', '微信:', '微信：', 'QQ:', 'QQ：', '站内消息', '站外消息']
+  if (prefixes.some(p => contact.startsWith(p))) return contact
+  if (/^\d{7,15}$/.test(contact)) return '手机: ' + contact
+  return contact
+}
+
 onMounted(async () => {
   const res = await getGroupBuys()
   items.value = res.data
@@ -35,7 +42,7 @@ onMounted(async () => {
           <span :class="item.status === 'open' ? 'status-open' : 'status-done'">
             {{ item.status === 'open' ? '进行中' : item.status === 'closed' ? '已截止' : '已完成' }}
           </span>
-          <span class="contact">{{ item.contact }}</span>
+          <span class="contact">{{ formatContact(item.contact) }}</span>
         </template>
       </ItemCard>
     </div>

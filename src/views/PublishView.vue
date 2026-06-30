@@ -1,105 +1,348 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import FormField from '@/components/FormField.vue'
+import { createTrade } from '@/api/trade'
+import { createLostFound } from '@/api/lostFound'
+import { createGroupBuy } from '@/api/groupBuy'
+import { createErrand } from '@/api/errand'
+
 const router = useRouter()
 
 const form = ref({
   type: 'trade',
   title: '',
   description: '',
-  price: undefined as number | undefined,
-  reward: undefined as number | undefined,
   location: '',
-  contact: '',
+  contactType: '手机',
+  contactValue: '',
   category: '',
+  condition: '',
+  price: undefined as number | undefined,
+  lostType: 'lost',
+  itemName: '',
+  eventTime: '',
+  groupType: '',
+  targetCount: undefined as number | undefined,
+  deadline: '',
+  taskType: '',
+  reward: undefined as number | undefined,
+  from: '',
+  to: '',
 })
 
-const types = [
-  { value: 'trade', label: '二手交易', icon: '🛒' },
-  { value: 'lost', label: '失物招领', icon: '🔍' },
-  { value: 'group', label: '拼单搭子', icon: '👥' },
-  { value: 'errand', label: '跑腿委托', icon: '🏃' },
+const errors = ref<Record<string, string>>({})
+
+const typeList = [
+  { value: 'trade', label: '二手交易' },
+  { value: 'lostFound', label: '失物招领' },
+  { value: 'groupBuy', label: '拼单搭子' },
+  { value: 'errand', label: '跑腿委托' },
 ]
 
 const tradeCategories = ['电子产品', '书籍教材', '生活用品', '服饰鞋包', '其他']
+const conditions = ['全新', '九成新', '八成新', '七成新', '五成及以下']
+const groupTypes = ['拼餐', '学习资料', '运动娱乐', '生活团购', '其他']
+const taskTypes = ['取快递', '代买', '跑腿', '其他']
+const contactOptions = ['手机', '微信', 'QQ']
+const needInput = ['手机', '微信', 'QQ']
 
-function submit() {
-  if (!form.value.title) return alert('请输入标题')
-  router.push('/')
+function validateForm(): boolean {
+  const e: Record<string, string> = {}
+  if (!form.value.title.trim()) e.title = '请输入标题'
+  if (form.value.type === 'trade') {
+    if (!form.value.price || form.value.price <= 0) e.price = '请输入有效价格'
+    if (!form.value.condition.trim()) e.condition = '请选择成色'
+  }
+  if (form.value.type === 'lostFound') {
+    if (!form.value.itemName.trim()) e.itemName = '请输入物品名称'
+  }
+  if (form.value.type === 'groupBuy') {
+    if (!form.value.targetCount || form.value.targetCount <= 0) e.targetCount = '请输入有效目标人数'
+  }
+  if (form.value.type === 'errand') {
+    if (!form.value.reward || form.value.reward <= 0) e.reward = '请输入有效酬劳'
+    if (!form.value.from.trim()) e.from = '请输入取件地点'
+    if (!form.value.to.trim()) e.to = '请输入送达地点'
+  }
+  if (needInput.includes(form.value.contactType) && !form.value.contactValue.trim()) {
+    e.contactValue = '请输入' + form.value.contactType
+  }
+  errors.value = e
+  return Object.keys(e).length === 0
+}
+
+function resetForm() {
+  form.value = {
+    type: form.value.type,
+    title: '', description: '', location: '', contactType: '手机', contactValue: '',
+    category: '', condition: '', price: undefined,
+    lostType: 'lost', itemName: '', eventTime: '',
+    groupType: '', targetCount: undefined, deadline: '',
+    taskType: '', reward: undefined, from: '', to: '',
+  }
+  errors.value = {}
+}
+
+watch(() => form.value.type, () => resetForm())
+
+const routeMap: Record<string, string> = {
+  trade: '/trade',
+  lostFound: '/lost-found',
+  groupBuy: '/group-buy',
+  errand: '/errand',
+}
+
+async function handleSubmit() {
+  if (!validateForm()) return
+  const d = new Date()
+  const now = d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0') + ' ' +
+    String(d.getHours()).padStart(2, '0') + ':' +
+    String(d.getMinutes()).padStart(2, '0')
+  const formatDT = (v: string) => v ? v.replace('T', ' ') : ''
+  const f = form.value
+  const contact = needInput.includes(f.contactType)
+    ? f.contactType + ': ' + f.contactValue.trim()
+    : f.contactType
+  try {
+    switch (f.type) {
+      case 'trade':
+        await createTrade({
+          title: f.title,
+          category: f.category,
+          price: f.price!,
+          condition: f.condition,
+          location: f.location,
+          publisher: '校园用户',
+          publishTime: now,
+          image: '',
+          status: 'open',
+          description: f.description,
+          contact,
+        })
+        break
+      case 'lostFound':
+        await createLostFound({
+          title: f.title,
+          type: f.lostType as 'lost' | 'found',
+          itemName: f.itemName,
+          location: f.location,
+          eventTime: formatDT(f.eventTime),
+          contact,
+          status: 'open',
+          description: f.description,
+        })
+        break
+      case 'groupBuy':
+        await createGroupBuy({
+          title: f.title,
+          type: f.groupType,
+          targetCount: f.targetCount!,
+          currentCount: 1,
+          deadline: formatDT(f.deadline),
+          location: f.location,
+          publisher: '校园用户',
+          status: 'open',
+          description: f.description,
+          contact,
+        })
+        break
+      case 'errand':
+        await createErrand({
+          title: f.title,
+          taskType: f.taskType,
+          reward: f.reward!,
+          from: f.from,
+          to: f.to,
+          deadline: formatDT(f.deadline),
+          publisher: '校园用户',
+          status: 'open',
+          description: f.description,
+        })
+        break
+    }
+    alert('发布成功！')
+    router.push(routeMap[f.type]!)
+  } catch {
+    alert('发布失败，请检查 Mock 服务是否运行。')
+  }
 }
 </script>
 
 <template>
-  <div>
-    <h1 class="page-title">发布信息</h1>
-
-    <div class="card" style="max-width:640px;margin:0 auto">
-      <div class="form-group">
-        <label class="form-label">信息类型</label>
-        <div class="grid-4">
-          <div v-for="t in types" :key="t.value"
-            class="type-card" :class="{ active: form.type === t.value }"
-            @click="form.type = t.value">
-            <div class="type-icon">{{ t.icon }}</div>
-            <div>{{ t.label }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">标题</label>
-        <input v-model="form.title" class="form-input" placeholder="请输入标题" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">描述</label>
-        <textarea v-model="form.description" class="form-textarea" placeholder="请详细描述..." rows="4"></textarea>
-      </div>
-
-      <div class="form-group" v-if="form.type === 'trade'">
-        <label class="form-label">分类</label>
-        <div class="flex flex-center gap-8">
-          <button v-for="c in tradeCategories" :key="c"
-            class="filter-btn" :class="{ active: form.category === c }"
-            @click="form.category = c">{{ c }}</button>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="form-group" v-if="form.type === 'trade' || form.type === 'group'">
-          <label class="form-label">{{ form.type === 'group' ? '预估价格' : '价格' }}</label>
-          <input v-model="form.price" type="number" class="form-input" placeholder="0" />
-        </div>
-        <div class="form-group" v-if="form.type === 'lost' || form.type === 'errand'">
-          <label class="form-label">酬金</label>
-          <input v-model="form.reward" type="number" class="form-input" placeholder="0" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">地点</label>
-          <input v-model="form.location" class="form-input" placeholder="如：二食堂" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">联系方式</label>
-          <input v-model="form.contact" class="form-input" placeholder="手机号/微信" />
-        </div>
-      </div>
-
-      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" @click="submit">提交发布</button>
+  <section class="page">
+    <div class="page-header">
+      <h1>发布信息</h1>
+      <p>选择信息类型，填写相关内容后提交。</p>
     </div>
-  </div>
+
+    <form class="publish-form" @submit.prevent="handleSubmit">
+      <!-- 类型选择 -->
+      <FormField label="信息类型" required>
+        <div class="type-group">
+          <button
+            v-for="t in typeList" :key="t.value"
+            type="button"
+            :class="['type-btn', { active: form.type === t.value }]"
+            @click="form.type = t.value"
+          >{{ t.label }}</button>
+        </div>
+      </FormField>
+
+      <!-- 标题 -->
+      <FormField label="标题" required :error="errors.title">
+        <input v-model="form.title" placeholder="请输入标题" />
+      </FormField>
+
+      <!-- 二手交易专属 -->
+      <template v-if="form.type === 'trade'">
+        <FormField label="分类" :error="errors.category">
+          <div class="chip-group">
+            <button
+              v-for="c in tradeCategories" :key="c"
+              type="button"
+              :class="['chip', { active: form.category === c }]"
+              @click="form.category = c"
+            >{{ c }}</button>
+          </div>
+        </FormField>
+        <FormField label="成色">
+          <div class="chip-group">
+            <button
+              v-for="c in conditions" :key="c"
+              type="button"
+              :class="['chip', { active: form.condition === c }]"
+              @click="form.condition = c"
+            >{{ c }}</button>
+          </div>
+        </FormField>
+        <FormField label="价格" required :error="errors.price">
+          <input v-model.number="form.price" type="number" min="0" placeholder="0" />
+        </FormField>
+      </template>
+
+      <!-- 失物招领专属 -->
+      <template v-if="form.type === 'lostFound'">
+        <FormField label="类型" required>
+          <div class="chip-group">
+            <button
+              type="button"
+              :class="['chip', { active: form.lostType === 'lost' }]"
+              @click="form.lostType = 'lost'"
+            >丢失</button>
+            <button
+              type="button"
+              :class="['chip', { active: form.lostType === 'found' }]"
+              @click="form.lostType = 'found'"
+            >拾到</button>
+          </div>
+        </FormField>
+        <FormField label="物品名称" required :error="errors.itemName">
+          <input v-model="form.itemName" placeholder="如：校园卡、雨伞" />
+        </FormField>
+        <FormField label="时间">
+          <input v-model="form.eventTime" type="datetime-local" />
+        </FormField>
+      </template>
+
+      <!-- 拼单搭子专属 -->
+      <template v-if="form.type === 'groupBuy'">
+        <FormField label="类型">
+          <div class="chip-group">
+            <button
+              v-for="c in groupTypes" :key="c"
+              type="button"
+              :class="['chip', { active: form.groupType === c }]"
+              @click="form.groupType = c"
+            >{{ c }}</button>
+          </div>
+        </FormField>
+        <FormField label="目标人数" required :error="errors.targetCount">
+          <input v-model.number="form.targetCount" type="number" min="1" placeholder="如：4" />
+        </FormField>
+        <FormField label="截止时间">
+          <input v-model="form.deadline" type="datetime-local" />
+        </FormField>
+      </template>
+
+      <!-- 跑腿委托专属 -->
+      <template v-if="form.type === 'errand'">
+        <FormField label="任务类型">
+          <div class="chip-group">
+            <button
+              v-for="c in taskTypes" :key="c"
+              type="button"
+              :class="['chip', { active: form.taskType === c }]"
+              @click="form.taskType = c"
+            >{{ c }}</button>
+          </div>
+        </FormField>
+        <FormField label="酬劳" required :error="errors.reward">
+          <input v-model.number="form.reward" type="number" min="0" placeholder="如：5" />
+        </FormField>
+        <FormField label="取件地点" required :error="errors.from">
+          <input v-model="form.from" placeholder="如：菜鸟驿站" />
+        </FormField>
+        <FormField label="送达地点" required :error="errors.to">
+          <input v-model="form.to" placeholder="如：西区 5 栋" />
+        </FormField>
+        <FormField label="截止时间">
+          <input v-model="form.deadline" type="datetime-local" />
+        </FormField>
+      </template>
+
+      <!-- 通用字段 -->
+      <FormField v-if="form.type !== 'errand'" label="地点">
+        <input v-model="form.location" placeholder="如：二食堂" />
+      </FormField>
+      <FormField label="描述">
+        <textarea v-model="form.description" rows="4" placeholder="请详细描述..."></textarea>
+      </FormField>
+      <FormField label="联系方式" :error="errors.contactValue">
+        <div class="chip-group">
+          <button
+            v-for="opt in contactOptions" :key="opt"
+            type="button"
+            class="chip"
+            :class="{ active: form.contactType === opt }"
+            @click="form.contactType = opt"
+          >{{ opt }}</button>
+        </div>
+        <input
+          v-if="needInput.includes(form.contactType)"
+          v-model="form.contactValue"
+          :placeholder="'请输入' + form.contactType"
+        />
+      </FormField>
+
+      <!-- 操作按钮 -->
+      <div class="actions">
+        <button type="button" class="secondary" @click="resetForm">重置</button>
+        <button type="submit" class="primary">提交发布</button>
+      </div>
+    </form>
+  </section>
 </template>
 
 <style scoped>
-.form-group { margin-bottom: 16px; }
-.form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-.form-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-.form-input:focus { border-color: var(--primary); }
-.form-textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; resize: vertical; font-family: inherit; }
-.form-textarea:focus { border-color: var(--primary); }
-.type-card { text-align: center; padding: 12px 8px; border-radius: 8px; border: 2px solid var(--border); cursor: pointer; transition: all .2s; font-size: 13px; }
-.type-card:hover { border-color: var(--primary); }
-.type-card.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
-.type-icon { font-size: 24px; margin-bottom: 4px; }
-.filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; color: var(--text-secondary); }
-.filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page { display: flex; flex-direction: column; gap: 20px; }
+.page-header { padding: 24px; border-radius: 16px; background: #fff; }
+.page-header h1 { margin: 0 0 8px; }
+.page-header p { margin: 0; color: #6b7280; }
+.publish-form { display: grid; gap: 18px; padding: 24px; border-radius: 16px; background: #fff; }
+input, select, textarea { width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+textarea { resize: vertical; }
+.actions { display: flex; justify-content: flex-end; gap: 12px; }
+button { border: none; border-radius: 8px; padding: 10px 18px; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.7; }
+.primary { background: #2563eb; color: #fff; }
+.secondary { background: #f3f4f6; color: #374151; }
+.type-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.type-btn { padding: 8px 16px; border-radius: 8px; background: #f3f4f6; color: #374151; font-size: 14px; }
+.type-btn.active { background: #2563eb; color: #fff; }
+.chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { padding: 6px 14px; border-radius: 20px; background: #f3f4f6; color: #374151; font-size: 13px; }
+.chip.active { background: #2563eb; color: #fff; }
 </style>

@@ -6,6 +6,13 @@ import { getLostFounds, type LostFoundItem } from '@/api/lostFound'
 
 const items = ref<LostFoundItem[]>([])
 
+function formatContact(contact: string): string {
+  const prefixes = ['手机:', '手机：', '微信:', '微信：', 'QQ:', 'QQ：', '站内消息', '站外消息']
+  if (prefixes.some(p => contact.startsWith(p))) return contact
+  if (/^\d{7,15}$/.test(contact)) return '手机: ' + contact
+  return contact
+}
+
 const typeLabel: Record<string, string> = { lost: '丢失', found: '拾到' }
 
 onMounted(async () => {
@@ -34,7 +41,7 @@ onMounted(async () => {
       >
         <template #footer>
           <span>物品：{{ item.itemName }}</span>
-          <span class="contact">联系人：{{ item.contact }}</span>
+          <span class="contact">{{ formatContact(item.contact) }}</span>
         </template>
       </ItemCard>
     </div>

@@ -18,3 +18,7 @@ export interface TradeItem {
 export function getTrades() {
   return http.get<TradeItem[]>('/trades')
 }
+
+export function createTrade(data: Omit<TradeItem, 'id'>) {
+  return http.post<TradeItem>('/trades', data)
+}

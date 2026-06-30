@@ -1,7 +1,7 @@
 {
   "trades": [
     {
-      "id": 1,
+      "id": "1",
       "title": "九成新机械键盘",
       "category": "数码配件",
       "price": 89,
@@ -15,7 +15,7 @@
       "contact": "微信: zhangkai"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "高等数学教材",
       "category": "教材资料",
       "price": 18,
@@ -29,7 +29,7 @@
       "contact": "QQ: 12345678"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "便携蓝牙音箱",
       "category": "数码配件",
       "price": 55,
@@ -43,7 +43,7 @@
       "contact": "手机: 13800001111"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "全新英语四级真题",
       "category": "教材资料",
       "price": 22,
@@ -57,7 +57,7 @@
       "contact": "微信: wangying"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "宿舍用小功率电煮锅",
       "category": "生活电器",
       "price": 30,
@@ -71,7 +71,7 @@
       "contact": "QQ: 87654321"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "二手山地自行车",
       "category": "出行代步",
       "price": 280,
@@ -85,7 +85,7 @@
       "contact": "手机: 13900002222"
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "考研数学复习全书",
       "category": "教材资料",
       "price": 35,
@@ -97,79 +97,129 @@
       "status": "done",
       "description": "已上岸，转让给学弟学妹。",
       "contact": "微信: zhaolei"
+    },
+    {
+      "title": "操作系统书",
+      "category": "书籍教材",
+      "price": 88,
+      "condition": "八成新",
+      "location": "东区",
+      "publisher": "校园用户",
+      "publishTime": "2026-06-30 15:32",
+      "image": "",
+      "status": "open",
+      "description": "本校学生，出书",
+      "contact": "12345697894",
+      "id": "xuALKpiEkrA"
+    },
+    {
+      "title": "材料袋子",
+      "category": "",
+      "price": 5,
+      "condition": "五成及以下",
+      "location": "东区教学楼",
+      "publisher": "校园用户",
+      "publishTime": "2026-06-30 15:48",
+      "image": "",
+      "status": "open",
+      "description": "多于袋子出售",
+      "contact": "手机: 22214782569",
+      "id": "nN8gMvIDorY"
     }
   ],
   "lostFounds": [
     {
-      "id": 1,
+      "id": "1",
       "title": "寻找黑色校园卡",
       "type": "lost",
       "itemName": "校园卡",
       "location": "一食堂附近",
       "eventTime": "2026-06-02 12:10",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800001111",
       "status": "open",
       "description": "校园卡卡套为黑色，内有学生证。"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "拾到蓝色雨伞",
       "type": "found",
       "itemName": "雨伞",
       "location": "教学楼 A 区",
       "eventTime": "2026-06-02 18:40",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800002222",
       "status": "open",
       "description": "雨伞放在 A 区一楼值班室。"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "丢失银色 U 盘",
       "type": "lost",
       "itemName": "U 盘",
       "location": "图书馆三楼电子阅览室",
       "eventTime": "2026-06-03 15:20",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800003333",
       "status": "open",
       "description": "32G 闪迪银色 U 盘，内有毕业论文初稿。"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "拾到黑色耳机仓",
       "type": "found",
       "itemName": "蓝牙耳机",
       "location": "操场看台座位",
       "eventTime": "2026-06-03 20:00",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800004444",
       "status": "open",
       "description": "白色充电仓，丢失者可描述品牌确认。"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "寻找灰色帆布袋",
       "type": "lost",
       "itemName": "帆布袋",
       "location": "西区快递站",
       "eventTime": "2026-06-04 13:00",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800005555",
       "status": "open",
       "description": "内含水杯和一本《百年孤独》。"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "拾到一串钥匙",
       "type": "found",
       "itemName": "钥匙串",
       "location": "二食堂三楼",
       "eventTime": "2026-06-04 18:30",
-      "contact": "站内消息联系",
+      "contact": "手机: 13800006666",
       "status": "done",
       "description": "银色钥匙串带有小熊挂件，已交至失物招领处。"
+    },
+    {
+      "title": "失物招领",
+      "type": "lost",
+      "itemName": "水杯",
+      "location": "东区",
+      "eventTime": "2024-11-04 13：00",
+      "contact": "手机: 11147852369",
+      "status": "open",
+      "description": "蓝色",
+      "id": "B6A3SF85jqI"
+    },
+    {
+      "title": "捡到校园卡",
+      "type": "found",
+      "itemName": "校园卡",
+      "location": "东区",
+      "eventTime": "2026-06-30 16:14",
+      "contact": "手机: 14725893625",
+      "status": "open",
+      "description": "名字是陈陈陈",
+      "id": "xAWsaEWUKYk"
     }
   ],
   "groupBuys": [
     {
-      "id": 1,
+      "id": "1",
       "title": "周五晚火锅拼单",
       "type": "拼餐",
       "targetCount": 6,
@@ -182,7 +232,7 @@
       "contact": "手机: 13600001111"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "四六级资料团购",
       "type": "学习资料",
       "targetCount": 10,
@@ -195,7 +245,7 @@
       "contact": "微信: zhaoxue"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "一起拼奶茶（东区一点点）",
       "type": "拼餐",
       "targetCount": 4,
@@ -208,7 +258,7 @@
       "contact": "QQ: 23456789"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "周末羽毛球场地拼单",
       "type": "运动娱乐",
       "targetCount": 4,
@@ -221,7 +271,7 @@
       "contact": "微信: sunpeng"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "期末自习室拼空调费",
       "type": "其他",
       "targetCount": 8,
@@ -234,7 +284,7 @@
       "contact": "手机: 13700002222"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "水果团购（车厘子）",
       "type": "生活团购",
       "targetCount": 10,
@@ -245,11 +295,24 @@
       "status": "done",
       "description": "已到货，请自提。",
       "contact": "站内消息联系"
+    },
+    {
+      "title": "塔斯汀",
+      "type": "拼餐",
+      "targetCount": 2,
+      "currentCount": 1,
+      "deadline": "2026-06-30 16:22",
+      "location": "东区",
+      "publisher": "校园用户",
+      "status": "open",
+      "description": "好吃",
+      "contact": "手机: 14725836989",
+      "id": "rAF6HZ4yvPI"
     }
   ],
   "errands": [
     {
-      "id": 1,
+      "id": "1",
       "title": "帮取快递到宿舍楼下",
       "taskType": "取快递",
       "reward": 3,
@@ -261,7 +324,7 @@
       "description": "快递较轻，送到宿舍楼下即可。"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "帮买一份晚餐",
       "taskType": "代买",
       "reward": 5,
@@ -273,7 +336,7 @@
       "description": "需要在 18:30 前送到。"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "帮取打印材料",
       "taskType": "取快递",
       "reward": 4,
@@ -285,7 +348,7 @@
       "description": "已付过费，直接报取件码即可。"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "代买退烧药送到宿舍",
       "taskType": "代买",
       "reward": 6,
@@ -297,7 +360,7 @@
       "description": "室友代发，急需退烧药和体温计。"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "去教务处领取课表",
       "taskType": "跑腿",
       "reward": 8,
@@ -309,7 +372,7 @@
       "description": "领取下学期的课程安排表。"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "帮取蛋糕到活动中心",
       "taskType": "取快递",
       "reward": 5,
@@ -319,6 +382,31 @@
       "publisher": "活动策划部",
       "status": "open",
       "description": "已预定，报手机尾号 6789 取。"
+    },
+    {
+      "title": "拿外卖",
+      "taskType": "跑腿",
+      "reward": 1,
+      "from": "东区教学楼下",
+      "to": "东区教学楼一教3层",
+      "deadline": "2026-06-30 16:24",
+      "publisher": "校园用户",
+      "status": "open",
+      "description": "",
+      "id": "0MT7nmkb6WM"
+    },
+    {
+      "title": "外卖",
+      "taskType": "跑腿",
+      "reward": 5,
+      "from": "校门口",
+      "to": "东区教学楼",
+      "deadline": "2026-06-30 16:24",
+      "publisher": "校园用户",
+      "status": "open",
+      "description": "",
+      "id": "7kdTeK02IwI"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

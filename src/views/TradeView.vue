@@ -6,6 +6,13 @@ import { getTrades, type TradeItem } from '@/api/trade'
 
 const trades = ref<TradeItem[]>([])
 
+function formatContact(contact: string): string {
+  const prefixes = ['手机:', '手机：', '微信:', '微信：', 'QQ:', 'QQ：', '站内消息', '站外消息']
+  if (prefixes.some(p => contact.startsWith(p))) return contact
+  if (/^\d{7,15}$/.test(contact)) return '手机: ' + contact
+  return contact
+}
+
 onMounted(async () => {
   const res = await getTrades()
   trades.value = res.data
@@ -33,7 +40,7 @@ onMounted(async () => {
         <template #footer>
           <strong>￥{{ item.price }}</strong>
           <span class="condition">{{ item.condition }}</span>
-          <span class="contact">{{ item.contact }}</span>
+          <span class="contact">{{ formatContact(item.contact) }}</span>
         </template>
       </ItemCard>
     </div>
