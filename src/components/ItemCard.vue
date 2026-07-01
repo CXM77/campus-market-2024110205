@@ -71,5 +71,8 @@ defineProps<{
 
 .footer {
   margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 </style>

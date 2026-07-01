@@ -3,8 +3,11 @@ import { onMounted, ref } from 'vue'
 import ItemCard from '@/components/ItemCard.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import { getGroupBuys, type GroupBuyItem } from '@/api/groupBuy'
+import { useFavoriteStore } from '@/stores/favorite'
 
 const items = ref<GroupBuyItem[]>([])
+
+const favStore = useFavoriteStore()
 
 function formatContact(contact: string): string {
   const prefixes = ['手机:', '手机：', '微信:', '微信：', 'QQ:', 'QQ：', '站内消息', '站外消息']
@@ -43,6 +46,7 @@ onMounted(async () => {
             {{ item.status === 'open' ? '进行中' : item.status === 'closed' ? '已截止' : '已完成' }}
           </span>
           <span class="contact">{{ formatContact(item.contact) }}</span>
+          <button class="fav-btn" @click="favStore.toggleFav(item.id, 'groupBuy')">收藏：{{ favStore.isFav(item.id, 'groupBuy') ? '★' : '☆' }}</button>
         </template>
       </ItemCard>
     </div>
@@ -57,5 +61,6 @@ onMounted(async () => {
 .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .status-open { color: #059669; }
 .status-done { color: #6b7280; }
-.contact { margin-left: auto; color: #2563eb; font-size: 13px; }
+.contact { color: #2563eb; font-size: 13px; }
+.fav-btn { cursor: pointer; font-size: inherit; margin-left: auto; user-select: none; border: none; background: none; padding: 0; font-family: inherit; color: #6b7280; }
 </style>

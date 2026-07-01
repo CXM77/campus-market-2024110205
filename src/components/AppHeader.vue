@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
+const userStore = useUserStore()
+
 const navItems = [
   { path: '/', label: '首页', icon: '🏠' },
   { path: '/trade', label: '二手交易', icon: '🛒' },
@@ -24,6 +27,10 @@ const navItems = [
           <span class="nav-label">{{ item.label }}</span>
         </router-link>
       </nav>
+      <router-link to="/user" class="nav-item user-badge">
+        <span>{{ userStore.avatar }}</span>
+        <span>{{ userStore.username }}</span>
+      </router-link>
     </div>
   </header>
 </template>

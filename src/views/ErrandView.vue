@@ -3,7 +3,9 @@ import { onMounted, ref } from 'vue'
 import ItemCard from '@/components/ItemCard.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import { getErrands, type ErrandItem } from '@/api/errand'
+import { useFavoriteStore } from '@/stores/favorite'
 
+const favStore = useFavoriteStore()
 const items = ref<ErrandItem[]>([])
 
 onMounted(async () => {
@@ -33,6 +35,7 @@ onMounted(async () => {
         <template #footer>
           <strong>￥{{ item.reward }}</strong>
           <span class="publisher">{{ item.publisher }}</span>
+          <button class="fav-btn" @click="favStore.toggleFav(item.id, 'errand')">收藏：{{ favStore.isFav(item.id, 'errand') ? '★' : '☆' }}</button>
         </template>
       </ItemCard>
     </div>
@@ -45,5 +48,6 @@ onMounted(async () => {
 .page-header h1 { margin: 0 0 8px; }
 .page-header p { margin: 0; color: #6b7280; }
 .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.publisher { margin-left: auto; color: #6b7280; font-size: 13px; }
+.publisher { color: #6b7280; font-size: 13px; }
+.fav-btn { cursor: pointer; font-size: inherit; margin-left: auto; user-select: none; border: none; background: none; padding: 0; font-family: inherit; color: #6b7280; }
 </style>

@@ -125,6 +125,20 @@
       "description": "多于袋子出售",
       "contact": "手机: 22214782569",
       "id": "nN8gMvIDorY"
+    },
+    {
+      "title": "马原赶紧走开",
+      "category": "书籍教材",
+      "price": 2,
+      "condition": "五成及以下",
+      "location": "东区",
+      "publisher": "计算机学院 校园用户",
+      "publishTime": "2026-07-01 11:22",
+      "image": "",
+      "status": "open",
+      "description": "二手马原书",
+      "contact": "手机: 14725836989",
+      "id": "k21wCLTr0rc"
     }
   ],
   "lostFounds": [

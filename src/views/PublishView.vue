@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 import FormField from '@/components/FormField.vue'
+
+const userStore = useUserStore()
 import { createTrade } from '@/api/trade'
 import { createLostFound } from '@/api/lostFound'
 import { createGroupBuy } from '@/api/groupBuy'
@@ -115,7 +118,7 @@ async function handleSubmit() {
           price: f.price!,
           condition: f.condition,
           location: f.location,
-          publisher: '校园用户',
+          publisher: userStore.displayName,
           publishTime: now,
           image: '',
           status: 'open',
@@ -143,7 +146,7 @@ async function handleSubmit() {
           currentCount: 1,
           deadline: formatDT(f.deadline),
           location: f.location,
-          publisher: '校园用户',
+          publisher: userStore.displayName,
           status: 'open',
           description: f.description,
           contact,
@@ -157,7 +160,7 @@ async function handleSubmit() {
           from: f.from,
           to: f.to,
           deadline: formatDT(f.deadline),
-          publisher: '校园用户',
+          publisher: userStore.displayName,
           status: 'open',
           description: f.description,
         })

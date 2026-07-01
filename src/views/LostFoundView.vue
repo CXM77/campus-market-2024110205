@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import ItemCard from '@/components/ItemCard.vue'
 import EmptyState from '@/components/EmptyState.vue'
 import { getLostFounds, type LostFoundItem } from '@/api/lostFound'
+import { useFavoriteStore } from '@/stores/favorite'
 
 const items = ref<LostFoundItem[]>([])
 
@@ -13,6 +14,7 @@ function formatContact(contact: string): string {
   return contact
 }
 
+const favStore = useFavoriteStore()
 const typeLabel: Record<string, string> = { lost: '丢失', found: '拾到' }
 
 onMounted(async () => {
@@ -42,6 +44,7 @@ onMounted(async () => {
         <template #footer>
           <span>物品：{{ item.itemName }}</span>
           <span class="contact">{{ formatContact(item.contact) }}</span>
+          <button class="fav-btn" @click="favStore.toggleFav(item.id, 'lostFound')">收藏：{{ favStore.isFav(item.id, 'lostFound') ? '★' : '☆' }}</button>
         </template>
       </ItemCard>
     </div>
@@ -54,5 +57,6 @@ onMounted(async () => {
 .page-header h1 { margin: 0 0 8px; }
 .page-header p { margin: 0; color: #6b7280; }
 .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.contact { margin-left: auto; color: #6b7280; font-size: 13px; }
+.contact { color: #6b7280; font-size: 13px; }
+.fav-btn { cursor: pointer; font-size: inherit; margin-left: auto; user-select: none; border: none; background: none; padding: 0; font-family: inherit; color: #6b7280; }
 </style>
