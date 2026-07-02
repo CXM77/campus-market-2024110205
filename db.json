@@ -1,4 +1,26 @@
 {
+  "users": [
+    {
+      "id": "1",
+      "username": "student",
+      "password": "123456",
+      "name": "校园用户",
+      "college": "计算机学院",
+      "grade": "2023级",
+      "avatar": "",
+      "bio": "热爱校园生活，喜欢分享闲置好物。"
+    },
+    {
+      "username": "110",
+      "password": "123456",
+      "name": "顾惜",
+      "college": "计算机科学学院",
+      "grade": "2024级",
+      "avatar": "",
+      "bio": "哈哈哈",
+      "id": "pvfN3jPWAGM"
+    }
+  ],
   "trades": [
     {
       "id": "1",
@@ -322,6 +344,19 @@
       "description": "好吃",
       "contact": "手机: 14725836989",
       "id": "rAF6HZ4yvPI"
+    },
+    {
+      "title": "烤肉",
+      "type": "拼餐",
+      "targetCount": 2,
+      "currentCount": 1,
+      "deadline": "2026-07-14 16:20",
+      "location": "成都",
+      "publisher": "顾惜",
+      "status": "open",
+      "description": "吃饭搭子",
+      "contact": "手机: 123456789",
+      "id": "bvsXcdFp0mk"
     }
   ],
   "errands": [

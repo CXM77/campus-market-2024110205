@@ -1,39 +1,23 @@
-<script setup lang="ts">
-defineProps<{
-  placeholder?: string
-  categories?: string[]
-  actionText?: string
-  actionTo?: string
-  search: string
-  filter?: string
-}>()
-
-const emit = defineEmits<{
-  'update:search': [value: string]
-  'update:filter': [value: string]
-}>()
-</script>
-
 <template>
-  <div class="card mb-16">
-    <div class="flex flex-center gap-16">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input :value="search" @input="emit('update:search', ($event.target as HTMLInputElement).value)" :placeholder="placeholder ?? '搜索...'" class="search-input" />
-      </div>
-      <div v-if="categories" class="flex flex-center gap-8">
-        <button v-for="c in categories" :key="c" class="filter-btn" :class="{ active: filter === c }" @click="emit('update:filter', c)">{{ c }}</button>
-      </div>
-      <router-link v-if="actionText" :to="actionTo ?? '/publish'" class="btn btn-primary" style="margin-left:auto">{{ actionText }}</router-link>
-    </div>
+  <div class="search-bar">
+    <input :value="modelValue" type="text" :placeholder="placeholder" @input="handleInput" />
+    <button v-if="modelValue" type="button" @click="$emit('update:modelValue', '')">清空</button>
   </div>
 </template>
 
+<script setup lang="ts">
+withDefaults(defineProps<{ modelValue: string; placeholder?: string }>(), { placeholder: '请输入关键词搜索' })
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+function handleInput(event: Event) {
+  const target = event.target as HTMLInputElement
+  emit('update:modelValue', target.value)
+}
+</script>
+
 <style scoped>
-.search-box { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 360px; }
-.search-icon { font-size: 16px; }
-.search-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-.search-input:focus { border-color: var(--primary); }
-.filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; color: var(--text-secondary); }
-.filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.search-bar { display: flex; gap: 12px; padding: 16px 20px; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.search-bar input { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; outline: none; transition: all .25s ease; }
+.search-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,140,247,0.15); }
+.search-bar button { border: none; border-radius: var(--radius-sm); padding: 0 16px; cursor: pointer; background: #f1f5f9; color: var(--text-secondary); font-size: 13px; transition: all .2s; }
+.search-bar button:hover { background: #e2e8f0; color: var(--text); }
 </style>

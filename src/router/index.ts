@@ -10,6 +10,8 @@ const router = createRouter({
     { path: '/errand', name: 'errand', component: () => import('@/views/ErrandView.vue') },
     { path: '/publish', name: 'publish', component: () => import('@/views/PublishView.vue') },
     { path: '/message', name: 'message', component: () => import('@/views/MessageView.vue') },
+    { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue') },
+    { path: '/register', name: 'register', component: () => import('@/views/RegisterView.vue') },
     { path: '/user', name: 'user', component: () => import('@/views/UserCenterView.vue') },
   ],
 })

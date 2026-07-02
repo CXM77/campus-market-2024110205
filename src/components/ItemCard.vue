@@ -30,49 +30,68 @@ defineProps<{
 
 <style scoped>
 .item-card {
-  padding: 18px;
-  border-radius: 12px;
+  padding: 20px;
+  border-radius: var(--radius);
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: all .25s ease;
+}
+.item-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
 .item-card__header {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .item-card h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .tag {
-  padding: 4px 8px;
+  flex-shrink: 0;
+  padding: 3px 10px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 12px;
+  background: var(--primary-gradient);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .description {
   margin: 12px 0;
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
-  color: #6b7280;
-  font-size: 13px;
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 
 .footer {
-  margin-top: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
 }
 </style>

@@ -21,3 +21,15 @@ export function getGroupBuys() {
 export function createGroupBuy(data: Omit<GroupBuyItem, 'id'>) {
   return http.post<GroupBuyItem>('/groupBuys', data)
 }
+
+export function getGroupBuyById(id: number | string) {
+  return http.get<GroupBuyItem>(`/groupBuys/${id}`)
+}
+
+export function updateGroupBuy(id: number | string, data: Partial<GroupBuyItem>) {
+  return http.patch<GroupBuyItem>(`/groupBuys/${id}`, data)
+}
+
+export function deleteGroupBuy(id: number | string) {
+  return http.delete(`/groupBuys/${id}`)
+}

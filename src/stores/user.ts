@@ -1,28 +1,47 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { getUsers, type User } from '@/api/user'
 
-export const useUserStore = defineStore('user', () => {
-  const username = ref('校园用户')
-  const studentId = ref('2024001')
-  const college = ref('计算机学院')
-  const grade = ref('2024级')
-  const avatar = ref('👤')
-  const isLoggedIn = ref(true)
+const STORAGE_KEY = 'campus-market-current-user'
 
-  const displayName = computed(() => `${college.value} ${username.value}`)
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    isLoggedIn: false,
+    currentUser: null as User | null,
+  }),
 
-  function setUser(u: { username: string; college: string; grade: string }) {
-    username.value = u.username
-    college.value = u.college
-    grade.value = u.grade
-  }
+  getters: {
+    displayName: (state) => state.currentUser?.name || '未登录',
+    userDescription: (state) => {
+      if (!state.currentUser) return '请先登录'
+      return `${state.currentUser.college} · ${state.currentUser.grade}`
+    },
+  },
 
-  function logout() {
-    isLoggedIn.value = false
-  }
+  actions: {
+    async login(username: string, password: string) {
+      const res = await getUsers()
+      const user = res.data.find((item) => item.username === username && item.password === password)
+      if (!user) throw new Error('账号或密码错误')
+      this.currentUser = user
+      this.isLoggedIn = true
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+    },
 
-  return {
-    username, studentId, college, grade, avatar, isLoggedIn,
-    displayName, setUser, logout,
-  }
+    restoreLogin() {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return
+      try {
+        this.currentUser = JSON.parse(raw)
+        this.isLoggedIn = true
+      } catch {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    },
+
+    logout() {
+      this.currentUser = null
+      this.isLoggedIn = false
+      localStorage.removeItem(STORAGE_KEY)
+    },
+  },
 })

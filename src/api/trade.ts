@@ -22,3 +22,15 @@ export function getTrades() {
 export function createTrade(data: Omit<TradeItem, 'id'>) {
   return http.post<TradeItem>('/trades', data)
 }
+
+export function getTradeById(id: number | string) {
+  return http.get<TradeItem>(`/trades/${id}`)
+}
+
+export function updateTrade(id: number | string, data: Partial<TradeItem>) {
+  return http.patch<TradeItem>(`/trades/${id}`, data)
+}
+
+export function deleteTrade(id: number | string) {
+  return http.delete(`/trades/${id}`)
+}

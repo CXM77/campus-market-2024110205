@@ -66,8 +66,8 @@ onMounted(async () => {
     </div>
 
     <div class="stats-row">
-      <div v-for="s in stats" :key="s.label" class="stat-card">
-        <div class="stat-value" :style="{ color: s.color }">{{ s.value }}</div>
+      <div v-for="s in stats" :key="s.label" class="stat-card" :style="{ '--stat-color': s.color }">
+        <div class="stat-value">{{ s.value }}</div>
         <div class="stat-label">{{ s.label }}</div>
       </div>
     </div>
@@ -102,7 +102,7 @@ onMounted(async () => {
 .hero-desc { color: var(--text-secondary); margin-top: 8px; font-size: 15px; }
 .hero-search { display: flex; gap: 8px; max-width: 500px; margin: 20px auto 0; }
 .search-input { flex: 1; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-.search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,144,217,0.1); }
+.search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27, 72, 121, 0.1); }
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
 .stat-card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
 .stat-value { font-size: 32px; font-weight: 800; }

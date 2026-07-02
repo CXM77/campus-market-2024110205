@@ -19,7 +19,7 @@ defineProps<{
 
 <style scoped>
 .form-field { display: flex; flex-direction: column; gap: 6px; }
-.form-label { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-.required { color: #dc2626; }
-.error-msg { margin: 0; font-size: 12px; color: #dc2626; }
+.form-label { font-size: 14px; font-weight: 600; color: var(--text); }
+.required { color: var(--danger); }
+.error-msg { margin: 0; font-size: 12px; color: var(--danger); font-weight: 500; }
 </style>
